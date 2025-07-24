@@ -1,17 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
-/* Monochrome Color palette */
-const COLORS = {
-  primary: '#111',         // pure black for primary elements
-  accent: '#333',          // dark gray accent
-  secondary: '#555',       // mid gray for secondary text etc.
-  lightBg: '#fff',         // white background
-  sidebarBg: '#f4f4f4',    // light gray sidebar
-  sidebarBorder: '#e0e0e0',
-  notePreviewBg: '#fafafa' // gray note editor bg
-};
-
 // Helper to load notes from localStorage
 function loadNotes() {
   try {
@@ -27,13 +16,28 @@ function saveNotes(notes) {
   localStorage.setItem('notes', JSON.stringify(notes));
 }
 
+// Helper to load the theme from localStorage or system preference (defaults to light)
+function getPreferredTheme() {
+  try {
+    const savedTheme = localStorage.getItem('notes_theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') return savedTheme;
+    // fallback to system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  } catch {
+    return 'light';
+  }
+}
+
 // PUBLIC_INTERFACE
 function App() {
   // Notes state management
   const [notes, setNotes] = useState(loadNotes());
   const [currentId, setCurrentId] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 700);
-  const [theme] = useState('light'); // Always light as per requirements
+  const [theme, setTheme] = useState(getPreferredTheme());
 
   // Responsive sidebar
   useEffect(() => {
@@ -45,6 +49,14 @@ function App() {
   }, []);
 
   useEffect(() => { saveNotes(notes); }, [notes]);
+
+  // Side effect for setting theme class on <html> or body
+  useEffect(() => {
+    // Apply as attribute for variable-based CSS
+    document.documentElement.setAttribute('data-theme', theme);
+    // Also save to localStorage so session persists
+    localStorage.setItem('notes_theme', theme);
+  }, [theme]);
 
   // Current note derived
   const currentNote = notes.find(n => n.id === currentId);
@@ -91,14 +103,27 @@ function App() {
   // PUBLIC_INTERFACE
   const handleSidebarToggle = () => setSidebarOpen(open => !open);
 
+  // PUBLIC_INTERFACE
+  // Theme toggling control
+  const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'));
+
+  // Utility for monochrome: fetch current CSS variable for style integration
+  const getColorVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name);
+
   // Minimalistic Sidebar Component
   function Sidebar() {
+    // Get CSS color variables for current theme
+    const sidebarBg = getColorVar('--sidebar-bg') || '#f4f4f4';
+    const sidebarBorder = getColorVar('--sidebar-border') || '#e0e0e0';
+    const primary = getColorVar('--primary') || '#111';
+    const secondary = getColorVar('--secondary') || '#555';
+
     return (
       <aside
         className="sidebar"
         style={{
-          background: COLORS.sidebarBg,
-          borderRight: `1px solid ${COLORS.sidebarBorder}`,
+          background: sidebarBg,
+          borderRight: `1px solid ${sidebarBorder}`,
           minWidth: 220,
           maxWidth: 275,
           width: sidebarOpen ? 240 : 0,
@@ -110,7 +135,7 @@ function App() {
       >
         <div className="sidebar-header" style={{
           padding: "22px 18px 10px 20px",
-          borderBottom: `1px solid ${COLORS.sidebarBorder}`,
+          borderBottom: `1px solid ${sidebarBorder}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between"
@@ -119,7 +144,7 @@ function App() {
             margin: 0,
             fontSize: "1.3rem",
             fontWeight: 700,
-            color: COLORS.primary
+            color: primary
           }}>
             Notes
           </h2>
@@ -127,7 +152,7 @@ function App() {
             onClick={createNote}
             title="Create new note"
             style={{
-              background: COLORS.primary,
+              background: primary,
               color: "white",
               border: "none",
               borderRadius: 6,
@@ -155,8 +180,8 @@ function App() {
                 <li
                   key={note.id}
                   style={{
-                    borderBottom: `1px solid ${COLORS.sidebarBorder}`,
-                    background: note.id === currentId ? COLORS.primary + "18" : "transparent",
+                    borderBottom: `1px solid ${sidebarBorder}`,
+                    background: note.id === currentId ? primary + "18" : "transparent",
                   }}
                 >
                   <button
@@ -168,7 +193,7 @@ function App() {
                       textAlign: "left",
                       padding: "16px 16px 14px 22px",
                       cursor: "pointer",
-                      color: note.id === currentId ? COLORS.primary : COLORS.secondary,
+                      color: note.id === currentId ? primary : secondary,
                       fontWeight: note.id === currentId ? 700 : 500,
                       fontSize: 17,
                       outline: "none"
@@ -200,18 +225,25 @@ function App() {
 
   // Minimalistic Main Editor Area
   function Main() {
+    // Get CSS color variables
+    const lightBg = getColorVar('--bg-light') || '#fff';
+    const accent = getColorVar('--accent') || '#333';
+    const primary = getColorVar('--primary') || '#111';
+    const secondary = getColorVar('--secondary') || '#555';
+    const notePreviewBg = getColorVar('--bg-note') || '#fafafa';
+
     if (!currentNote && notes.length === 0) {
       return (
         <div
           className="main-empty"
           style={{
             display: "flex", flexDirection: "column", alignItems: "center",
-            justifyContent: "center", height: "100vh", color: COLORS.secondary, background: COLORS.lightBg
+            justifyContent: "center", height: "100vh", color: secondary, background: lightBg
           }}>
-          <h2 style={{ fontWeight: 500, color: COLORS.secondary }}>Welcome to Notes</h2>
+          <h2 style={{ fontWeight: 500, color: secondary }}>Welcome to Notes</h2>
           <button
             style={{
-              background: COLORS.primary, color: "#fff", border: "none",
+              background: primary, color: "#fff", border: "none",
               borderRadius: 8, fontSize: 18, fontWeight: 600,
               padding: "12px 38px", marginTop: 24, cursor: "pointer"
             }}
@@ -245,7 +277,7 @@ function App() {
           padding: "36px 22px 18px 28px",
           maxWidth: 700,
           margin: "0 auto",
-          background: COLORS.lightBg,
+          background: lightBg,
           minHeight: "100vh",
           boxSizing: "border-box"
         }}
@@ -258,13 +290,13 @@ function App() {
             onChange={e => updateCurrentNoteField('title', e.target.value)}
             style={{
               border: "none",
-              borderBottom: `2px solid ${COLORS.primary}`,
+              borderBottom: `2px solid ${primary}`,
               fontSize: 26,
               fontWeight: 600,
               width: "100%",
               padding: "7px 4px",
               background: "transparent",
-              color: COLORS.secondary,
+              color: secondary,
               outline: "none"
             }}
             aria-label="Note title"
@@ -273,7 +305,7 @@ function App() {
           <button
             onClick={() => deleteNote(currentNote.id)}
             style={{
-              background: COLORS.accent,
+              background: accent,
               border: "none",
               color: "#fff",
               fontWeight: 700,
@@ -299,13 +331,13 @@ function App() {
             width: "100%",
             height: "55vh",
             resize: "vertical",
-            border: `1.5px solid ${COLORS.secondary}20`,
+            border: `1.5px solid ${secondary}20`,
             borderRadius: 8,
             fontSize: 16,
             padding: "15px 14px",
             fontFamily: "inherit",
-            background: COLORS.notePreviewBg,
-            color: COLORS.secondary,
+            background: notePreviewBg,
+            color: secondary,
             outline: "none"
           }}
           aria-label="Note content"
@@ -324,14 +356,20 @@ function App() {
     );
   }
 
-  // Header / Topbar (minimal)
+  // Header / Topbar with theme toggle
   function TopBar() {
+    // Get CSS color variables for background and border
+    const lightBg = getColorVar('--bg-light') || '#fff';
+    const sidebarBorder = getColorVar('--sidebar-border') || '#e0e0e0';
+    const secondary = getColorVar('--secondary') || '#555';
+    const primary = getColorVar('--primary') || '#111';
+
     return (
       <header
         style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
-          background: COLORS.lightBg, height: 55, minHeight: 55, position: "fixed",
-          left: 0, right: 0, top: 0, zIndex: 11, borderBottom: `1px solid ${COLORS.sidebarBorder}`,
+          background: lightBg, height: 55, minHeight: 55, position: "fixed",
+          left: 0, right: 0, top: 0, zIndex: 11, borderBottom: `1px solid ${sidebarBorder}`,
           boxSizing: "border-box", padding: "0 0 0 0"
         }}
       >
@@ -340,7 +378,7 @@ function App() {
             background: "none",
             border: "none",
             fontSize: 26,
-            color: COLORS.secondary,
+            color: secondary,
             padding: "0 18px",
             display: sidebarOpen ? "none" : undefined,
             cursor: "pointer",
@@ -356,14 +394,42 @@ function App() {
           style={{
             fontWeight: 700,
             fontSize: 20,
-            color: COLORS.primary,
+            color: primary,
             letterSpacing: "-1px",
             paddingLeft: sidebarOpen ? 26 : 0
           }}
         >
           Personal Notes
         </div>
-        <div style={{ width: 90 }} />
+        {/* Theme toggle button (icon toggle) */}
+        <button
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          style={{
+            background: "none",
+            border: "none",
+            color: secondary,
+            fontSize: 24,
+            marginRight: 8,
+            cursor: "pointer",
+            width: 42,
+            height: 42,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "50%",
+            transition: "background 0.18s"
+          }}
+        >
+          {theme === 'dark' ? (
+            // Light mode icon (sun, Unicode 2600)
+            <span role="img" aria-label="Light mode" style={{fontSize: 22}}>☀️</span>
+          ) : (
+            // Dark mode icon (moon, Unicode 1F311 or 263E)
+            <span role="img" aria-label="Dark mode" style={{fontSize: 22}}>🌙</span>
+          )}
+        </button>
       </header>
     );
   }
@@ -386,13 +452,14 @@ function App() {
   }
 
   // Layout: sidebar left, main right
+  // Top-level always gets theme as data attribute
   return (
     <div
       className="notes-app"
       style={{
         minHeight: "100vh",
-        background: COLORS.lightBg,
-        color: COLORS.secondary,
+        background: "var(--bg-light)",
+        color: "var(--secondary)",
         fontFamily: "'Segoe UI', 'Roboto', 'Oxygen', 'Helvetica Neue', Arial, sans-serif"
       }}
       data-theme={theme}
@@ -408,7 +475,7 @@ function App() {
         {/* Main note content area */}
         <main style={{
           flex: 1,
-          background: COLORS.lightBg,
+          background: "var(--bg-light)",
           minHeight: "calc(100vh - 55px)",
           maxWidth: "100vw",
           transition: "margin-left 0.23s",

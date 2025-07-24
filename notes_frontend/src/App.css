@@ -1,4 +1,5 @@
-:root {
+:root,
+[data-theme="light"] {
   --primary: #111;
   --accent: #333; /* subtle accent, still monochrome */
   --secondary: #555;
@@ -6,6 +7,16 @@
   --bg-note: #fafafa;
   --sidebar-bg: #f4f4f4;
   --sidebar-border: #e0e0e0;
+}
+
+[data-theme="dark"] {
+  --primary: #f6f6f6;
+  --accent: #111;
+  --secondary: #ccc;
+  --bg-light: #191919;
+  --bg-note: #232323;
+  --sidebar-bg: #151515;
+  --sidebar-border: #474747;
 }
 
 body {
