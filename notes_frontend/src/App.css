@@ -1,17 +1,16 @@
-/* CSS Variables for Theme Management */
 :root {
-  --primary: #1976d2;
-  --accent: #ff4081;
-  --secondary: #424242;
-  --bg-light: #e3f2fd;       /* changed to light blue */
-  --bg-note: #f0f7ff;        /* complementary lighter shade for notes */
-  --sidebar-bg: #e9f3fc;     /* slightly darker variant for sidebar */
-  --sidebar-border: #daeaf6;
+  --primary: #111;
+  --accent: #333; /* subtle accent, still monochrome */
+  --secondary: #555;
+  --bg-light: #fff;
+  --bg-note: #fafafa;
+  --sidebar-bg: #f4f4f4;
+  --sidebar-border: #e0e0e0;
 }
 
 body {
-  background: var(--bg-light);      /* Soft light blue */
-  color: var(--secondary);
+  background: var(--bg-light);
+  color: var(--primary);
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -21,15 +20,14 @@ body {
 /* Layout Containers */
 .notes-app {
   min-height: 100vh;
-  background: var(--bg-light); /* Soft light blue */
+  background: var(--bg-light);
 }
 
-/* Main editor area uses a slightly lighter blue for contrast */
+/* Main editor area uses a slightly lighter for contrast */
 .main-editor {
   background: var(--bg-light);
 }
 
-/* Empty state consistent with background */
 .main-empty {
   background: var(--bg-light);
 }
@@ -80,7 +78,7 @@ body {
   text-align: left;
   padding: 16px 16px 14px 22px;
   cursor: pointer;
-  color: var(--secondary);
+  color: var(--primary);
   font-size: 17px;
   outline: none;
   font-weight: 500;
@@ -89,13 +87,13 @@ body {
 }
 
 .sidebar-noteslist button[aria-current="page"] {
-  background: #1976d220;
-  color: var(--primary);
+  background: #2222;
+  color: #111;
   font-weight: 700;
 }
 
 .sidebar-noteslist button:hover {
-  background: #1976d220;
+  background: #ececec;
 }
 
 /* Main Editor Area */
@@ -116,7 +114,7 @@ body {
   width: 100%;
   padding: 7px 4px;
   background: transparent;
-  color: var(--secondary);
+  color: var(--primary);
   outline: none;
 }
 
@@ -125,13 +123,13 @@ body {
   width: 100%;
   height: 55vh;
   resize: vertical;
-  border: 1.5px solid #42424220;
+  border: 1.5px solid #bbbbbb;
   border-radius: 8px;
   font-size: 16px;
   padding: 15px 14px;
   font-family: inherit;
   background: var(--bg-note);
-  color: var(--secondary);
+  color: var(--primary);
   outline: none;
 }
 
@@ -166,7 +164,7 @@ button {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  color: var(--secondary);
+  color: var(--primary);
   background: var(--bg-light);
 }
 
@@ -178,6 +176,7 @@ button {
   padding: 12px 38px;
 }
 
+/* Topbar/Header */
 .topbar {
   display: flex;
   align-items: center;
@@ -199,7 +198,7 @@ button {
 .sidebar-overlay {
   position: fixed;
   left: 0; top: 0; width: 100vw; height: 100vh;
-  background: #0005; z-index: 20;
+  background: #0002; z-index: 20;
 }
 
 /* Responsive Design */
@@ -229,9 +228,9 @@ button {
   width: 7px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #e5e6e8;
+  background-color: #d6d6d6;
   border-radius: 7px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #d6d7d8;
+  background-color: #bbbbbb;
 }

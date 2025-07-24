@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
-// Color palette
+/* Monochrome Color palette */
 const COLORS = {
-  primary: '#1976d2',
-  accent: '#ff4081',
-  secondary: '#424242',
-  lightBg: '#fff',
-  sidebarBg: '#f5f6fa',
-  sidebarBorder: '#e3e5ea',
-  notePreviewBg: '#f9fafe'
+  primary: '#111',         // pure black for primary elements
+  accent: '#333',          // dark gray accent
+  secondary: '#555',       // mid gray for secondary text etc.
+  lightBg: '#fff',         // white background
+  sidebarBg: '#f4f4f4',    // light gray sidebar
+  sidebarBorder: '#e0e0e0',
+  notePreviewBg: '#fafafa' // gray note editor bg
 };
 
 // Helper to load notes from localStorage
@@ -146,8 +146,8 @@ function App() {
         </div>
         <nav className="sidebar-noteslist" style={{ flex: 1, overflowY: "auto", height: "calc(100vh - 62px)" }}>
           {notes.length === 0 ? (
-            <div style={{ color: '#b0b3b8', margin: "48px 0", textAlign: "center", fontSize: 16 }}>
-              No notes yet.<br />Click <span style={{ color: COLORS.primary, fontWeight: 700 }}>&#43;</span> to create.
+            <div style={{ color: '#888', margin: "48px 0", textAlign: "center", fontSize: 16 }}>
+              No notes yet.<br />Click <span style={{ color: '#222', fontWeight: 700 }}>&#43;</span> to create.
             </div>
           ) : (
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -227,7 +227,7 @@ function App() {
           className="main-noselect"
           style={{
             display: "flex", alignItems: "center", justifyContent: "center",
-            height: "100vh", color: "#b0b3b8", background: "#fff"
+            height: "100vh", color: "#999", background: "#fafafa"
           }}>
           <div>
             <div style={{ fontSize: 20, fontWeight: 400, marginBottom: 4 }}>Select a note</div>
@@ -312,7 +312,7 @@ function App() {
         />
         <div style={{
           fontSize: 12,
-          color: "#b0b3b7",
+          color: "#aaa",
           marginTop: 18,
           fontWeight: 400
         }}>
@@ -376,7 +376,7 @@ function App() {
           style={{
             position: "fixed",
             left: 0, top: 0, width: "100vw", height: "100vh",
-            background: "#0005", zIndex: 20
+            background: "rgba(0,0,0,0.12)", zIndex: 20
           }}
           onClick={handleSidebarToggle}
         ></div>
