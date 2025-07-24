@@ -1,0 +1,247 @@
+:root,
+[data-theme="light"] {
+  --primary: #111;
+  --accent: #333; /* subtle accent, still monochrome */
+  --secondary: #555;
+  --bg-light: #fff;
+  --bg-note: #fafafa;
+  --sidebar-bg: #f4f4f4;
+  --sidebar-border: #e0e0e0;
+}
+
+[data-theme="dark"] {
+  --primary: #f6f6f6;
+  --accent: #111;
+  --secondary: #ccc;
+  --bg-light: #191919;
+  --bg-note: #232323;
+  --sidebar-bg: #151515;
+  --sidebar-border: #474747;
+}
+
+body {
+  background: var(--bg-light);
+  color: var(--primary);
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Layout Containers */
+.notes-app {
+  min-height: 100vh;
+  background: var(--bg-light);
+}
+
+/* Main editor area uses a slightly lighter for contrast */
+.main-editor {
+  background: var(--bg-light);
+}
+
+.main-empty {
+  background: var(--bg-light);
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  min-width: 220px;
+  max-width: 275px;
+  width: 240px;
+  height: 100vh;
+  transition: width 0.22s cubic-bezier(.51,.01,.83,1);
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 22px 18px 10px 20px;
+  border-bottom: 1px solid var(--sidebar-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-noteslist {
+  flex: 1;
+  overflow-y: auto;
+  height: calc(100vh - 62px);
+}
+
+/* Sidebar list items */
+.sidebar-noteslist ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-noteslist li {
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.sidebar-noteslist button {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 16px 16px 14px 22px;
+  cursor: pointer;
+  color: var(--primary);
+  font-size: 17px;
+  outline: none;
+  font-weight: 500;
+  background: none;
+  transition: background 0.17s;
+}
+
+.sidebar-noteslist button[aria-current="page"] {
+  background: #2222;
+  color: #111;
+  font-weight: 700;
+}
+
+.sidebar-noteslist button:hover {
+  background: #ececec;
+}
+
+/* Main Editor Area */
+.main-editor {
+  padding: 36px 22px 18px 28px;
+  max-width: 700px;
+  margin: 0 auto;
+  background: var(--bg-light);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.main-editor input[type="text"] {
+  border: none;
+  border-bottom: 2px solid var(--primary);
+  font-size: 26px;
+  font-weight: 600;
+  width: 100%;
+  padding: 7px 4px;
+  background: transparent;
+  color: var(--primary);
+  outline: none;
+}
+
+.main-editor textarea {
+  margin-top: 24px;
+  width: 100%;
+  height: 55vh;
+  resize: vertical;
+  border: 1.5px solid #bbbbbb;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 15px 14px;
+  font-family: inherit;
+  background: var(--bg-note);
+  color: var(--primary);
+  outline: none;
+}
+
+/* Button Styles */
+button {
+  transition: background 0.18s;
+}
+
+.main-editor button,
+.sidebar-header button,
+.main-empty button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
+.main-editor button[aria-label="Delete note"] {
+  background: var(--accent);
+  padding: 7px 16px;
+  font-size: 17px;
+  margin-left: 8px;
+}
+
+.main-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: var(--primary);
+  background: var(--bg-light);
+}
+
+.main-empty button {
+  background: var(--primary);
+  color: #fff;
+  margin-top: 24px;
+  font-size: 18px;
+  padding: 12px 38px;
+}
+
+/* Topbar/Header */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-light);
+  height: 55px;
+  min-height: 55px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 11;
+  border-bottom: 1px solid var(--sidebar-border);
+  box-sizing: border-box;
+  padding: 0 0 0 0;
+}
+
+/* Sidebar overlay for mobile */
+.sidebar-overlay {
+  position: fixed;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: #0002; z-index: 20;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .sidebar { min-width: 158px !important; width: 18vw !important; }
+  .main-editor { padding-left: 6vw !important; }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    height: 100vh;
+    z-index: 25;
+    transition: width 0.22s;
+  }
+  .main-editor { padding-left: 5vw !important; }
+}
+
+@media (max-width: 550px) {
+  .sidebar { width: 95vw !important; min-width: 0 !important; }
+  .main-editor { padding-left: 0 !important; padding-right: 2vw !important; }
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d6d6d6;
+  border-radius: 7px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #bbbbbb;
+}
