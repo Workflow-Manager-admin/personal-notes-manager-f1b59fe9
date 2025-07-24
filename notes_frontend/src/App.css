@@ -3,23 +3,34 @@
   --primary: #1976d2;
   --accent: #ff4081;
   --secondary: #424242;
-  --bg-light: #fff;
-  --bg-note: #f9fafe;
-  --sidebar-bg: #f5f6fa;
-  --sidebar-border: #e3e5ea;
+  --bg-light: #e3f2fd;       /* changed to light blue */
+  --bg-note: #f0f7ff;        /* complementary lighter shade for notes */
+  --sidebar-bg: #e9f3fc;     /* slightly darker variant for sidebar */
+  --sidebar-border: #daeaf6;
 }
 
 body {
-  background: var(--bg-light);
+  background: var(--bg-light);      /* Soft light blue */
   color: var(--secondary);
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 /* Layout Containers */
 .notes-app {
   min-height: 100vh;
+  background: var(--bg-light); /* Soft light blue */
+}
+
+/* Main editor area uses a slightly lighter blue for contrast */
+.main-editor {
+  background: var(--bg-light);
+}
+
+/* Empty state consistent with background */
+.main-empty {
   background: var(--bg-light);
 }
 
